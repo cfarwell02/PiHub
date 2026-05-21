@@ -1,119 +1,182 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>PiHub System Monitor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
 
+  <body>
     <main class="system-page">
+      <section class="system-header-box">
+        <a href="/" class="back-button">← Back to PiHub Dashboard</a>
 
-        <section class="system-header-box">
-            <a href="/" class="back-button">← Back to PiHub Dashboard</a>
+        <h1>System Monitor</h1>
+        <p>Live system information from the device running PiHub.</p>
+        <div class="refresh-controls">
+          <button id="refresh-button" class="control-button">
+            Refresh Now
+          </button>
+          <button id="toggle-refresh-button" class="control-button">
+            Auto Refresh: On
+          </button>
+        </div>
+      </section>
 
-            <h1>System Monitor</h1>
-            <p>
-                Live system information from the device running PiHub.
-            </p>
-        </section>
+      <section class="system-grid">
+        <div class="system-card">
+          <h2>CPU Usage</h2>
+          <p class="card-description">Current processor load</p>
+          <div class="stat-box">
+            <span id="cpu-text" class="stat-text">0</span
+            ><span class="stat-symbol">%</span>
+          </div>
+        </div>
 
-        <section class="system-grid">
+        <div class="system-card">
+          <h2>RAM Usage</h2>
+          <p class="card-description">Current memory usage</p>
+          <div class="stat-box">
+            <span id="ram-text" class="stat-text">0</span
+            ><span class="stat-symbol">%</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>CPU Usage</h2>
-                <p class="card-description">Current processor load</p>
-                <div class="stat-box">
-                    <span id="cpu-text" class="stat-text">0</span><span class="stat-symbol">%</span>
-                </div>
-            </div>
+        <div class="system-card">
+          <h2>Temperature</h2>
+          <p class="card-description">Current system temperature</p>
+          <div class="stat-box">
+            <span id="temp-text" class="stat-text">0</span
+            ><span class="stat-symbol">°F</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>RAM Usage</h2>
-                <p class="card-description">Current memory usage</p>
-                <div class="stat-box">
-                    <span id="ram-text" class="stat-text">0</span><span class="stat-symbol">%</span>
-                </div>
-            </div>
+        <div class="system-card">
+          <h2>Disk Usage</h2>
+          <p class="card-description">Current disk usage</p>
+          <div class="stat-box">
+            <span id="disk-text" class="stat-text">0</span
+            ><span class="stat-symbol">%</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>Temperature</h2>
-                <p class="card-description">Current system temperature</p>
-                <div class="stat-box">
-                    <span id="temp-text" class="stat-text">0</span><span class="stat-symbol">°F</span>
-                </div>
-            </div>
+        <div class="system-card">
+          <h2>Uptime</h2>
+          <p class="card-description">Time since last system boot</p>
+          <div class="stat-box">
+            <span id="uptime-text" class="stat-text">0h 0m</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>Disk Usage</h2>
-                <p class="card-description">Current disk usage</p>
-                <div class="stat-box">
-                    <span id="disk-text" class="stat-text">0</span><span class="stat-symbol">%</span>
-                </div>
-            </div>
+        <div class="system-card">
+          <h2>Processes</h2>
+          <p class="card-description">Number of running system processes</p>
+          <div class="stat-box">
+            <span id="process-text" class="stat-text">0</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>Uptime</h2>
-                <p class="card-description">Time since last system boot</p>
-                <div class="stat-box">
-                    <span id="uptime-text" class="stat-text">0h 0m</span>
-                </div>
-            </div>
+        <div class="system-card">
+          <h2>IP Address</h2>
+          <p class="card-description">Local network address for this device</p>
+          <div class="stat-box">
+            <span id="ip-text" class="stat-text small-stat">N/A</span>
+          </div>
+        </div>
 
-            <div class="system-card">
-                <h2>Processes</h2>
-                <p class="card-description">Number of running system processes</p>
-                <div class="stat-box">
-                    <span id="process-text" class="stat-text">0</span>
-                </div>
-            </div>
-
-            <div class="system-card">
-                <h2>IP Address</h2>
-                <p class="card-description">Local network address for this device</p>
-                <div class="stat-box">
-                    <span id="ip-text" class="stat-text small-stat">N/A</span>
-                </div>
-            </div>
-
-            <div class="system-card">
-                <h2>Device Info</h2>
-                <p class="card-description">Basic information about this machine</p>
-                <div class="stat-box device-info-box">
-                    <p><strong>Name:</strong> <span id="device-text">N/A</span></p>
-                    <p><strong>System:</strong> <span id="system-text">N/A</span></p>
-                    <p><strong>Machine:</strong> <span id="machine-text">N/A</span></p>
-                </div>
-            </div>
-
-        </section>
-
+        <div class="system-card">
+          <h2>Device Info</h2>
+          <p class="card-description">Basic information about this machine</p>
+          <div class="stat-box device-info-box">
+            <p><strong>Name:</strong> <span id="device-text">N/A</span></p>
+            <p><strong>System:</strong> <span id="system-text">N/A</span></p>
+            <p><strong>Machine:</strong> <span id="machine-text">N/A</span></p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <script>
-    function updateStats() {
-        fetch('/api/system-usage')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('cpu-text').innerText = Number(data.cpu).toFixed(1);
-                document.getElementById('ram-text').innerText = Number(data.ram).toFixed(1);
-                document.getElementById('temp-text').innerText = data.temp;
-                document.getElementById('disk-text').innerText = Number(data.disk).toFixed(1);
+      let savedAutoRefresh = localStorage.getItem("autoRefresh");
 
-                document.getElementById('uptime-text').innerText = data.uptime;
-                document.getElementById('process-text').innerText = data.processes;
-                document.getElementById('ip-text').innerText = data.ip;
+      let autoRefresh = savedAutoRefresh === null ? true : savedAutoRefresh === "true";
+      let refreshInterval = null;
 
-                document.getElementById('device-text').innerText = data.device;
-                document.getElementById('system-text').innerText = data.system;
-                document.getElementById('machine-text').innerText = data.machine;
-            })
-            .catch(error => console.error('Error fetching system stats:', error));
-    }
+      function updateStats() {
+        fetch("/api/system-usage")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("cpu-text").innerText = Number(
+              data.cpu,
+            ).toFixed(1);
+            document.getElementById("ram-text").innerText = Number(
+              data.ram,
+            ).toFixed(1);
+            document.getElementById("temp-text").innerText = data.temp;
+            document.getElementById("disk-text").innerText = Number(
+              data.disk,
+            ).toFixed(1);
 
-    setInterval(updateStats, 1000);
-    updateStats();
-</script>
+            document.getElementById("uptime-text").innerText = data.uptime;
+            document.getElementById("process-text").innerText = data.processes;
+            document.getElementById("ip-text").innerText = data.ip;
 
-</body>
+            document.getElementById("device-text").innerText = data.device;
+            document.getElementById("system-text").innerText = data.system;
+            document.getElementById("machine-text").innerText = data.machine;
+          })
+          .catch((error) =>
+            console.error("Error fetching system stats:", error),
+          );
+      }
+
+      function startAutoRefresh() {
+        if (refreshInterval !== null) {
+          clearInterval(refreshInterval);
+        }
+
+        refreshInterval = setInterval(updateStats, 1000);
+      }
+
+      function stopAutoRefresh() {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+      }
+
+      document
+        .getElementById("refresh-button")
+        .addEventListener("click", updateStats);
+
+      document
+        .getElementById("toggle-refresh-button")
+        .addEventListener("click", function () {
+          autoRefresh = !autoRefresh;
+
+          localStorage.setItem("autoRefresh", autoRefresh);
+
+          if (autoRefresh) {
+            this.innerText = "Auto Refresh: On";
+            startAutoRefresh();
+          } else {
+            this.innerText = "Auto Refresh: Off";
+            stopAutoRefresh();
+          }
+        });
+
+      const toggleButton = document.getElementById("toggle-refresh-button");
+
+      if (autoRefresh) {
+        toggleButton.innerText = "Auto Refresh: On";
+        startAutoRefresh();
+      } else {
+        toggleButton.innerText = "Auto Refresh: Off";
+        stopAutoRefresh();
+      }
+
+      updateStats();
+    </script>
+  </body>
 </html>
