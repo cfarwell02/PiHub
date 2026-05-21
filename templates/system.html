@@ -36,7 +36,7 @@
           </div>
         </div>
 
-        <div class="system-card">
+        <div class="system-card" id="ram-card">
           <h2>RAM Usage</h2>
           <p class="card-description">Current memory usage</p>
           <div class="stat-box">
@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div class="system-card">
+        <div class="system-card" id="disk-card">
           <h2>Disk Usage</h2>
           <p class="card-description">Current disk usage</p>
           <div class="stat-box">
@@ -102,7 +102,8 @@
     <script>
       let savedAutoRefresh = localStorage.getItem("autoRefresh");
 
-      let autoRefresh = savedAutoRefresh === null ? true : savedAutoRefresh === "true";
+      let autoRefresh =
+        savedAutoRefresh === null ? true : savedAutoRefresh === "true";
       let refreshInterval = null;
 
       function updateStats() {
@@ -127,7 +128,12 @@
             document.getElementById("device-text").innerText = data.device;
             document.getElementById("system-text").innerText = data.system;
             document.getElementById("machine-text").innerText = data.machine;
-          })
+        
+            updateCardStatus("ram-card", data.ram, 75, 90);
+            updateCardStatus("disk-card", data.disk, 80, 90);
+            
+        
+        })
           .catch((error) =>
             console.error("Error fetching system stats:", error),
           );
@@ -177,6 +183,24 @@
       }
 
       updateStats();
+
+      function updateCardStatus(cardId, value, warningLevel, dangerLevel) {
+        const card = document.getElementById(cardId);
+
+        card.classList.remove(
+          "status-normal",
+          "status-warning",
+          "status-danger",
+        );
+
+        if (value >= dangerLevel) {
+          card.classList.add("status-danger");
+        } else if (value >= warningLevel) {
+          card.classList.add("status-warning");
+        } else {
+          card.classList.add("status-normal");
+        }
+      }
     </script>
   </body>
 </html>
