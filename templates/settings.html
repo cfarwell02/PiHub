@@ -10,9 +10,11 @@
   </head>
 
   <body>
+
+    {% include "navbar.html" %}
+
     <main class="system-page">
       <section class="system-header-box">
-        <a href="/" class="back-button">← Back to PiHub Dashboard</a>
 
         <h1>Settings</h1>
         <p>Control how PiHub behaves.</p>
@@ -46,7 +48,9 @@
     <script>
       const refreshIntervalSelect = document.getElementById("refresh-interval");
       const temperatureUnitSelect = document.getElementById("temperature-unit");
-      const saveSettingsButton = document.getElementById("save-settings-button");
+      const saveSettingsButton = document.getElementById(
+        "save-settings-button",
+      );
       const settingsMessage = document.getElementById("settings-message");
 
       refreshIntervalSelect.value = "{{ settings.refresh_interval }}";

@@ -299,3 +299,53 @@ body {
   font-weight: 700;
   color: #22c55e;
 }
+
+.navbar {
+  width: 100%;
+  background: #020617;
+  border-bottom: 1px solid #263244;
+  padding: 14px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-logo {
+  color: #f8fafc;
+  font-size: 1.2rem;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.navbar-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.navbar-links a:hover {
+  color: #38bdf8;
+}
+
+.navbar-disabled {
+  color: #64748b !important;
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.navbar-disabled:hover {
+  color: #64748b !important;
+}
