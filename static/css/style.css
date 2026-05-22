@@ -349,3 +349,36 @@ body {
 .navbar-disabled:hover {
   color: #64748b !important;
 }
+
+.logs-section {
+  margin-top: 30px;
+}
+
+.logs-card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #263244;
+  overflow-x: auto;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logs-table th,
+.logs-table td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #263244;
+}
+
+.logs-table th {
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+.logs-table td {
+  color: #cbd5e1;
+}

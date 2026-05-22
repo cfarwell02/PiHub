@@ -10,7 +10,6 @@
   </head>
 
   <body>
-
     {% include "navbar.html" %}
 
     <main class="system-page">
@@ -165,7 +164,11 @@
     </main>
 
     <script>
-      let savedAutoRefresh = localStorage.getItem("autoRefresh");
+      const AUTO_REFRESH_KEY = "autoRefresh";
+
+      const toggleButton = document.getElementById("toggle-refresh-button");
+
+      let savedAutoRefresh = localStorage.getItem(AUTO_REFRESH_KEY);
 
       let autoRefresh =
         savedAutoRefresh === null ? true : savedAutoRefresh === "true";
@@ -258,8 +261,18 @@
       }
 
       function stopAutoRefresh() {
-        clearInterval(refreshInterval);
-        refreshInterval = null;
+        if (refreshInterval !== null) {
+          clearInterval(refreshInterval);
+          refreshInterval = null;
+        }
+      }
+
+      function updateAutoRefreshButton() {
+        if (autoRefresh) {
+          toggleButton.innerText = "Auto Refresh: On";
+        } else {
+          toggleButton.innerText = "Auto Refresh: Off";
+        }
       }
 
       document
@@ -269,34 +282,30 @@
           updateSystemDetails();
         });
 
-      document
-        .getElementById("toggle-refresh-button")
-        .addEventListener("click", function () {
-          autoRefresh = !autoRefresh;
+      toggleButton.addEventListener("click", function () {
+        autoRefresh = !autoRefresh;
 
-          localStorage.setItem("autoRefresh", autoRefresh);
+        localStorage.setItem(AUTO_REFRESH_KEY, autoRefresh.toString());
+        updateAutoRefreshButton();
 
-          if (autoRefresh) {
-            this.innerText = "Auto Refresh: On";
-            startAutoRefresh();
-          } else {
-            this.innerText = "Auto Refresh: Off";
-            stopAutoRefresh();
-          }
-        });
-
-      const toggleButton = document.getElementById("toggle-refresh-button");
-
-      if (autoRefresh) {
-        toggleButton.innerText = "Auto Refresh: On";
-        startAutoRefresh();
-      } else {
-        toggleButton.innerText = "Auto Refresh: Off";
-        stopAutoRefresh();
-      }
+        if (autoRefresh) {
+          startAutoRefresh();
+          createLog("Auto refresh turned on");
+        } else {
+          stopAutoRefresh();
+          createLog("Auto refresh turned off");
+        }
+      });
 
       updateStats();
       updateSystemDetails();
+      updateAutoRefreshButton();
+
+      if (autoRefresh) {
+        startAutoRefresh();
+      } else {
+        stopAutoRefresh();
+      }
 
       function updateCardStatus(cardId, value, warningLevel, dangerLevel) {
         const card = document.getElementById(cardId);
@@ -314,6 +323,20 @@
         } else {
           card.classList.add("status-normal");
         }
+      }
+
+      function createLog(message) {
+        fetch("/api/logs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: message,
+          }),
+        }).catch((error) => {
+          console.error("Error creating log:", error);
+        });
       }
     </script>
   </body>

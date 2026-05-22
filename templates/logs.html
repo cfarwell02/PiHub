@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PiHub Logs</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    {% include "navbar.html" %}
+
+    <main class="system-page">
+      <section class="system-header-box">
+        <h1>Logs</h1>
+        <p>View recent PiHub system events and app activity.</p>
+      </section>
+
+      <section class="logs-section">
+        <div class="logs-card">
+          <table class="logs-table">
+            <thead>
+              <tr>
+                <th>Timestamp</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+
+            <tbody id="logs-table-body">
+              <tr>
+                <td colspan="2">Loading logs...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      function loadLogs() {
+        fetch("/api/logs")
+          .then((response) => response.json())
+          .then((logs) => {
+            const tableBody = document.getElementById("logs-table-body");
+            tableBody.innerHTML = "";
+
+            if (logs.length === 0) {
+              tableBody.innerHTML = "<tr><td colspan='2'>No logs yet.</td></tr>";
+              return;
+            }
+
+            logs.forEach((log) => {
+              const row = document.createElement("tr");
+
+              const timestampCell = document.createElement("td");
+              timestampCell.innerText = log.timestamp;
+
+              const messageCell = document.createElement("td");
+              messageCell.innerText = log.message;
+
+              row.appendChild(timestampCell);
+              row.appendChild(messageCell);
+
+              tableBody.appendChild(row);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading logs:", error);
+          });
+      }
+
+      loadLogs();
+      setInterval(loadLogs, 3000);
+    </script>
+  </body>
+</html>
