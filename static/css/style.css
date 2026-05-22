@@ -267,3 +267,35 @@ body {
 .details-card p:last-child {
   border-bottom: none;
 }
+
+.settings-section {
+  margin-top: 30px;
+}
+
+.settings-card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #263244;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-card label {
+  font-weight: 700;
+}
+
+.settings-card select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #263244;
+  background: #0f172a;
+  color: white;
+}
+
+#settings-message {
+  font-weight: 700;
+  color: #22c55e;
+}

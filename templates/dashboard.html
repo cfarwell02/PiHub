@@ -1,56 +1,56 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>PiHub Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
     <header class="dashboard-header">
-        <h1>PiHub</h1>
-        <p>Your Raspberry Pi control center</p>
+      <h1>PiHub</h1>
+      <p>Your Raspberry Pi control center</p>
     </header>
 
     <main class="dashboard-grid">
+      <a href="/system" class="dashboard-card">
+        <h2>System Monitor</h2>
+        <p>View CPU, RAM, disk usage, temperature, and uptime.</p>
+        <span class="card-status active">Available</span>
+      </a>
 
-        <a href="/system" class="dashboard-card">
-            <h2>System Monitor</h2>
-            <p>View CPU, RAM, disk usage, temperature, and uptime.</p>
-            <span class="card-status active">Available</span>
-        </a>
+      <a href="#" class="dashboard-card disabled">
+        <h2>LED Controller</h2>
+        <p>Control LEDs connected to your Raspberry Pi.</p>
+        <span class="card-status planned">Planned</span>
+      </a>
 
-        <a href="#" class="dashboard-card disabled">
-            <h2>LED Controller</h2>
-            <p>Control LEDs connected to your Raspberry Pi.</p>
-            <span class="card-status planned">Planned</span>
-        </a>
+      <a href="#" class="dashboard-card disabled">
+        <h2>Audio Visualizer</h2>
+        <p>Control music-reactive lighting and audio effects.</p>
+        <span class="card-status planned">Planned</span>
+      </a>
 
-        <a href="#" class="dashboard-card disabled">
-            <h2>Audio Visualizer</h2>
-            <p>Control music-reactive lighting and audio effects.</p>
-            <span class="card-status planned">Planned</span>
-        </a>
+      <a href="#" class="dashboard-card disabled">
+        <h2>Scripts</h2>
+        <p>Run saved Python or Linux scripts from the dashboard.</p>
+        <span class="card-status planned">Planned</span>
+      </a>
 
-        <a href="#" class="dashboard-card disabled">
-            <h2>Scripts</h2>
-            <p>Run saved Python or Linux scripts from the dashboard.</p>
-            <span class="card-status planned">Planned</span>
-        </a>
+      <a href="#" class="dashboard-card disabled">
+        <h2>Network Tools</h2>
+        <p>View IP address, network status, and connected devices.</p>
+        <span class="card-status planned">Planned</span>
+      </a>
 
-        <a href="#" class="dashboard-card disabled">
-            <h2>Network Tools</h2>
-            <p>View IP address, network status, and connected devices.</p>
-            <span class="card-status planned">Planned</span>
-        </a>
-
-        <a href="#" class="dashboard-card disabled">
-            <h2>Settings</h2>
-            <p>Configure PiHub preferences and dashboard options.</p>
-            <span class="card-status planned">Planned</span>
-        </a>
-
+      <a href="/settings" class="dashboard-card">
+        <h2>Settings</h2>
+        <p>Configure PiHub preferences and dashboard options.</p>
+        <span class="card-status active">Available</span>
+      </a>
+      
     </main>
-
-</body>
+  </body>
 </html>

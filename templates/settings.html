@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PiHub Settings</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <main class="system-page">
+      <section class="system-header-box">
+        <a href="/" class="back-button">← Back to PiHub Dashboard</a>
+
+        <h1>Settings</h1>
+        <p>Control how PiHub behaves.</p>
+      </section>
+
+      <section class="settings-section">
+        <div class="settings-card">
+          <label for="refresh-interval">Refresh Interval</label>
+          <select id="refresh-interval">
+            <option value="1000">1 second</option>
+            <option value="3000">3 seconds</option>
+            <option value="5000">5 seconds</option>
+            <option value="10000">10 seconds</option>
+          </select>
+
+          <label for="temperature-unit">Temperature Unit</label>
+          <select id="temperature-unit">
+            <option value="C">Celsius</option>
+            <option value="F">Fahrenheit</option>
+          </select>
+
+          <button id="save-settings-button" class="control-button">
+            Save Settings
+          </button>
+
+          <p id="settings-message"></p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const refreshIntervalSelect = document.getElementById("refresh-interval");
+      const temperatureUnitSelect = document.getElementById("temperature-unit");
+      const saveSettingsButton = document.getElementById("save-settings-button");
+      const settingsMessage = document.getElementById("settings-message");
+
+      refreshIntervalSelect.value = "{{ settings.refresh_interval }}";
+      temperatureUnitSelect.value = "{{ settings.temperature_unit }}";
+
+      saveSettingsButton.addEventListener("click", function () {
+        const settings = {
+          refresh_interval: refreshIntervalSelect.value,
+          temperature_unit: temperatureUnitSelect.value,
+        };
+
+        fetch("/api/settings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(settings),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              settingsMessage.innerText = "Settings saved successfully.";
+            } else {
+              settingsMessage.innerText = "Settings failed to save.";
+            }
+          })
+          .catch((error) => {
+            console.error("Error saving settings:", error);
+            settingsMessage.innerText = "Error saving settings.";
+          });
+      });
+    </script>
+  </body>
+</html>
