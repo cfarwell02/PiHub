@@ -243,3 +243,27 @@ body {
   border-color: #ef4444;
   border: 3px solid #ef4444;
 }
+.details-section {
+  margin-top: 30px;
+}
+
+.details-section h2 {
+  margin-bottom: 16px;
+}
+
+.details-card {
+  background: #111827;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #263244;
+}
+
+.details-card p {
+  margin: 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #263244;
+}
+
+.details-card p:last-child {
+  border-bottom: none;
+}

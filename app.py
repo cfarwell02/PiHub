@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify
 import psutil
-from modules.system_info import get_system_stats
+from modules.system_info import get_system_stats, get_expanded_system_details
 
 
 
@@ -15,9 +15,13 @@ def dashboard():
 def system_page():
     return render_template("system.html")
 
-@app.route('/api/system-usage', methods = ['GET'])
+@app.route("/api/system-usage", methods = ['GET'])
 def system_usage():
      return jsonify(get_system_stats()) 
+
+@app.route("/api/system-details", methods=["GET"])
+def system_details():
+    return jsonify(get_expanded_system_details())
 
 
 if __name__ == "__main__":

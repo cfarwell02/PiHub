@@ -49,8 +49,7 @@
           <h2>Temperature</h2>
           <p class="card-description">Current system temperature</p>
           <div class="stat-box">
-            <span id="temp-text" class="stat-text">0</span
-            ><span class="stat-symbol">°F</span>
+            <span id="temp-text" class="stat-text">Unavailable</span>
           </div>
         </div>
 
@@ -97,6 +96,71 @@
           </div>
         </div>
       </section>
+      <section class="details-section">
+        <h2>Expanded System Details</h2>
+
+        <div class="details-card">
+          <p>
+            <strong>Platform:</strong>
+            <span id="platform-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>System:</strong> <span id="system-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Release:</strong>
+            <span id="release-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Version:</strong>
+            <span id="version-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Machine:</strong>
+            <span id="machine-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Processor:</strong>
+            <span id="processor-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Python Version:</strong>
+            <span id="python-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Physical Cores:</strong>
+            <span id="physical-cores-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Logical Cores:</strong>
+            <span id="logical-cores-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Total RAM:</strong>
+            <span id="total-ram-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Available RAM:</strong>
+            <span id="available-ram-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Total Disk:</strong>
+            <span id="total-disk-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Free Disk:</strong>
+            <span id="free-disk-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Boot Time:</strong>
+            <span id="boot-time-detail">Loading...</span>
+          </p>
+          <p>
+            <strong>Current User:</strong>
+            <span id="current-user-detail">Loading...</span>
+          </p>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -116,7 +180,8 @@
             document.getElementById("ram-text").innerText = Number(
               data.ram,
             ).toFixed(1);
-            document.getElementById("temp-text").innerText = data.temp;
+            document.getElementById("temp-text").innerText =
+              data.temp === "Unavailable" ? "Unavailable" : data.temp + "°F";
             document.getElementById("disk-text").innerText = Number(
               data.disk,
             ).toFixed(1);
@@ -128,14 +193,48 @@
             document.getElementById("device-text").innerText = data.device;
             document.getElementById("system-text").innerText = data.system;
             document.getElementById("machine-text").innerText = data.machine;
-        
+
             updateCardStatus("ram-card", data.ram, 75, 90);
             updateCardStatus("disk-card", data.disk, 80, 90);
-            
-        
-        })
+          })
           .catch((error) =>
             console.error("Error fetching system stats:", error),
+          );
+      }
+
+      function updateSystemDetails() {
+        fetch("/api/system-details")
+          .then((response) => response.json())
+          .then((data) => {
+            document.getElementById("platform-detail").innerText =
+              data.platform;
+            document.getElementById("system-detail").innerText = data.system;
+            document.getElementById("release-detail").innerText = data.release;
+            document.getElementById("version-detail").innerText = data.version;
+            document.getElementById("machine-detail").innerText = data.machine;
+            document.getElementById("processor-detail").innerText =
+              data.processor;
+            document.getElementById("python-detail").innerText =
+              data.python_version;
+            document.getElementById("physical-cores-detail").innerText =
+              data.physical_cores;
+            document.getElementById("logical-cores-detail").innerText =
+              data.logical_cores;
+            document.getElementById("total-ram-detail").innerText =
+              data.total_ram_gb + " GB";
+            document.getElementById("available-ram-detail").innerText =
+              data.available_ram_gb + " GB";
+            document.getElementById("total-disk-detail").innerText =
+              data.total_disk_gb + " GB";
+            document.getElementById("free-disk-detail").innerText =
+              data.free_disk_gb + " GB";
+            document.getElementById("boot-time-detail").innerText =
+              data.boot_time;
+            document.getElementById("current-user-detail").innerText =
+              data.current_user;
+          })
+          .catch((error) =>
+            console.error("Error fetching system details:", error),
           );
       }
 
@@ -154,7 +253,10 @@
 
       document
         .getElementById("refresh-button")
-        .addEventListener("click", updateStats);
+        .addEventListener("click", function () {
+          updateStats();
+          updateSystemDetails();
+        });
 
       document
         .getElementById("toggle-refresh-button")
@@ -183,6 +285,7 @@
       }
 
       updateStats();
+      updateSystemDetails();
 
       function updateCardStatus(cardId, value, warningLevel, dangerLevel) {
         const card = document.getElementById(cardId);
