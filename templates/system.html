@@ -180,8 +180,7 @@
             document.getElementById("ram-text").innerText = Number(
               data.ram,
             ).toFixed(1);
-            document.getElementById("temp-text").innerText =
-              data.temp === "Unavailable" ? "Unavailable" : data.temp + "°F";
+            document.getElementById("temp-text").innerText = data.temp;
             document.getElementById("disk-text").innerText = Number(
               data.disk,
             ).toFixed(1);
@@ -243,7 +242,18 @@
           clearInterval(refreshInterval);
         }
 
-        refreshInterval = setInterval(updateStats, 1000);
+        fetch("/api/settings")
+          .then((response) => response.json())
+          .then((settings) => {
+            refreshInterval = setInterval(
+              updateStats,
+              settings.refresh_interval,
+            );
+          })
+          .catch((error) => {
+            console.error("Error loading settings:", error);
+            refreshInterval = setInterval(updateStats, 1000);
+          });
       }
 
       function stopAutoRefresh() {

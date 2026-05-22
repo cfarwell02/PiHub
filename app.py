@@ -19,9 +19,9 @@ def dashboard():
 def system_page():
     return render_template("system.html")
 
-@app.route("/api/system-usage", methods = ['GET'])
+@app.route("/api/system-usage", methods=["GET"])
 def system_usage():
-     return jsonify(get_system_stats()) 
+    return jsonify(get_system_stats(app_settings["temperature_unit"]))
 
 @app.route("/api/system-details", methods=["GET"])
 def system_details():

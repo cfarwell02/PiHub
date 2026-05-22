@@ -51,8 +51,18 @@ def get_ip_address():
 
     except Exception:
         return "N/A"
+    
+def format_temperature(temp_celsius, temp_unit="C"):
+    if temp_celsius == "Unavailable":
+        return "Unavailable"
 
-def get_system_stats():
+    if temp_unit == "F":
+        temp_fahrenheit = (temp_celsius * 9 / 5) + 32
+        return f"{round(temp_fahrenheit, 1)}°F"
+
+    return f"{temp_celsius}°C"
+
+def get_system_stats(temp_unit="C"):
      cpu_percent= psutil.cpu_percent(interval = None)
      ram_percent= psutil.virtual_memory().percent
      disk_percent = psutil.disk_usage('/').percent
@@ -62,7 +72,7 @@ def get_system_stats():
      return {
         "cpu": cpu_percent,
         "ram": ram_percent,
-        "temp": get_temperature(),
+        "temp": format_temperature(get_temperature(), temp_unit),
         "disk": disk_percent,
         "uptime": get_uptime(), 
         "processes": process_count, 
