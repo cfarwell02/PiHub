@@ -382,3 +382,38 @@ body {
 .logs-table td {
   color: #cbd5e1;
 }
+
+.settings-section {
+  margin-top: 2rem;
+}
+
+.settings-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 500px;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.settings-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.settings-group select {
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #020617;
+  color: white;
+}
+
+#settings-message {
+  margin-top: 1rem;
+}

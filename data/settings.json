@@ -1,5 +1,5 @@
 {
-    "auto_refresh": true,
-    "refresh_interval": 3000,
-    "temperature_unit": "F"
+  "auto_refresh": true,
+  "refresh_interval": 3000,
+  "temperature_unit": "F"
 }

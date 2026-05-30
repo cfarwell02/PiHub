@@ -8,30 +8,42 @@
       href="{{ url_for('static', filename='css/style.css') }}"
     />
   </head>
+
   <body>
     {% include "navbar.html" %}
 
-    <main class="page-container">
-      <h1>Settings</h1>
+    <main class="system-page">
+      <section class="system-header-box">
+        <h1>Settings</h1>
+        <p>Manage PiHub refresh behavior and display preferences.</p>
+      </section>
 
-      <section class="settings-card">
-        <label for="refresh-interval">Refresh Interval</label>
-        <select id="refresh-interval">
-          <option value="1000">1 second</option>
-          <option value="3000">3 seconds</option>
-          <option value="5000">5 seconds</option>
-          <option value="10000">10 seconds</option>
-        </select>
+      <section class="settings-section">
+        <div class="settings-card">
+          <div class="settings-group">
+            <label for="refresh-interval">Refresh Interval</label>
+            <select id="refresh-interval">
+              <option value="1000">1 second</option>
+              <option value="3000">3 seconds</option>
+              <option value="5000">5 seconds</option>
+              <option value="10000">10 seconds</option>
+            </select>
+          </div>
 
-        <label for="temperature-unit">Temperature Unit</label>
-        <select id="temperature-unit">
-          <option value="C">Celsius</option>
-          <option value="F">Fahrenheit</option>
-        </select>
+          <div class="settings-group">
+            <label for="temperature-unit">Temperature Unit</label>
+            <select id="temperature-unit">
+              <option value="C">Celsius</option>
+              <option value="F">Fahrenheit</option>
+            </select>
+          </div>
 
-        <button id="save-settings-btn">Save Settings</button>
+          <button id="save-settings-btn" class="control-button">
+            Save Settings
+          </button>
 
-        <p id="settings-message"></p>
+          <p id="settings-message"></p>
+        </div>
       </section>
     </main>
 
@@ -42,11 +54,16 @@
       const settingsMessage = document.getElementById("settings-message");
 
       async function loadSettings() {
-        const response = await fetch("/api/settings");
-        const settings = await response.json();
+        try {
+          const response = await fetch("/api/settings");
+          const settings = await response.json();
 
-        refreshIntervalSelect.value = settings.refresh_interval || 1000;
-        temperatureUnitSelect.value = settings.temperature_unit || "C";
+          refreshIntervalSelect.value = settings.refresh_interval || 1000;
+          temperatureUnitSelect.value = settings.temperature_unit || "C";
+        } catch (error) {
+          console.error("Error loading settings:", error);
+          settingsMessage.textContent = "Error loading settings.";
+        }
       }
 
       async function saveSettings() {
@@ -55,19 +72,24 @@
           temperature_unit: temperatureUnitSelect.value,
         };
 
-        const response = await fetch("/api/settings", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(settings),
-        });
+        try {
+          const response = await fetch("/api/settings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(settings),
+          });
 
-        const result = await response.json();
+          const result = await response.json();
 
-        if (result.success) {
-          settingsMessage.textContent = "Settings saved successfully.";
-        } else {
+          if (result.success) {
+            settingsMessage.textContent = "Settings saved successfully.";
+          } else {
+            settingsMessage.textContent = "Error saving settings.";
+          }
+        } catch (error) {
+          console.error("Error saving settings:", error);
           settingsMessage.textContent = "Error saving settings.";
         }
       }

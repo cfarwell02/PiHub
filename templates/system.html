@@ -172,7 +172,13 @@
 
       let autoRefresh =
         savedAutoRefresh === null ? true : savedAutoRefresh === "true";
-      let refreshInterval = null;
+
+      let autoRefreshTimer = null;
+
+      function refreshAllSystemInfo() {
+        updateStats();
+        updateSystemDetails();
+      }
 
       function updateStats() {
         fetch("/api/system-usage")
@@ -181,10 +187,13 @@
             document.getElementById("cpu-text").innerText = Number(
               data.cpu,
             ).toFixed(1);
+
             document.getElementById("ram-text").innerText = Number(
               data.ram,
             ).toFixed(1);
+
             document.getElementById("temp-text").innerText = data.temp;
+
             document.getElementById("disk-text").innerText = Number(
               data.disk,
             ).toFixed(1);
@@ -211,28 +220,42 @@
           .then((data) => {
             document.getElementById("platform-detail").innerText =
               data.platform;
+
             document.getElementById("system-detail").innerText = data.system;
+
             document.getElementById("release-detail").innerText = data.release;
+
             document.getElementById("version-detail").innerText = data.version;
+
             document.getElementById("machine-detail").innerText = data.machine;
+
             document.getElementById("processor-detail").innerText =
               data.processor;
+
             document.getElementById("python-detail").innerText =
               data.python_version;
+
             document.getElementById("physical-cores-detail").innerText =
               data.physical_cores;
+
             document.getElementById("logical-cores-detail").innerText =
               data.logical_cores;
+
             document.getElementById("total-ram-detail").innerText =
               data.total_ram_gb + " GB";
+
             document.getElementById("available-ram-detail").innerText =
               data.available_ram_gb + " GB";
+
             document.getElementById("total-disk-detail").innerText =
               data.total_disk_gb + " GB";
+
             document.getElementById("free-disk-detail").innerText =
               data.free_disk_gb + " GB";
+
             document.getElementById("boot-time-detail").innerText =
               data.boot_time;
+
             document.getElementById("current-user-detail").innerText =
               data.current_user;
           })
@@ -242,28 +265,32 @@
       }
 
       function startAutoRefresh() {
-        if (refreshInterval !== null) {
-          clearInterval(refreshInterval);
+        if (autoRefreshTimer !== null) {
+          clearInterval(autoRefreshTimer);
         }
 
         fetch("/api/settings")
           .then((response) => response.json())
           .then((settings) => {
-            refreshInterval = setInterval(
-              updateStats,
-              settings.refresh_interval,
-            );
+            const interval = settings.refresh_interval || 1000;
+
+            updateStats();
+
+            autoRefreshTimer = setInterval(updateStats, interval);
           })
           .catch((error) => {
             console.error("Error loading settings:", error);
-            refreshInterval = setInterval(updateStats, 1000);
+
+            updateStats();
+
+            autoRefreshTimer = setInterval(updateStats, 1000);
           });
       }
 
       function stopAutoRefresh() {
-        if (refreshInterval !== null) {
-          clearInterval(refreshInterval);
-          refreshInterval = null;
+        if (autoRefreshTimer !== null) {
+          clearInterval(autoRefreshTimer);
+          autoRefreshTimer = null;
         }
       }
 
@@ -278,8 +305,8 @@
       document
         .getElementById("refresh-button")
         .addEventListener("click", function () {
-          updateStats();
-          updateSystemDetails();
+          refreshAllSystemInfo();
+          createLog("System monitor manually refreshed");
         });
 
       toggleButton.addEventListener("click", function () {
@@ -296,16 +323,6 @@
           createLog("Auto refresh turned off");
         }
       });
-
-      updateStats();
-      updateSystemDetails();
-      updateAutoRefreshButton();
-
-      if (autoRefresh) {
-        startAutoRefresh();
-      } else {
-        stopAutoRefresh();
-      }
 
       function updateCardStatus(cardId, value, warningLevel, dangerLevel) {
         const card = document.getElementById(cardId);
@@ -337,6 +354,15 @@
         }).catch((error) => {
           console.error("Error creating log:", error);
         });
+      }
+
+      refreshAllSystemInfo();
+      updateAutoRefreshButton();
+
+      if (autoRefresh) {
+        startAutoRefresh();
+      } else {
+        stopAutoRefresh();
       }
     </script>
   </body>
