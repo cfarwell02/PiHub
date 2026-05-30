@@ -417,3 +417,89 @@ body {
 #settings-message {
   margin-top: 1rem;
 }
+
+.logs-section {
+  margin-top: 2rem;
+}
+
+.logs-card {
+  background: #111827;
+  border: 1px solid #263449;
+  border-radius: 16px;
+  padding: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.logs-table th {
+  color: #f8fafc;
+  font-size: 0.95rem;
+  text-align: left;
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid #263449;
+}
+
+.logs-table td {
+  color: #dbeafe;
+  font-size: 0.95rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid #263449;
+  vertical-align: middle;
+}
+
+.logs-table th:nth-child(1),
+.logs-table td:nth-child(1) {
+  width: 220px;
+}
+
+.logs-table th:nth-child(2),
+.logs-table td:nth-child(2) {
+  width: 120px;
+  text-align: center;
+}
+
+.logs-table th:nth-child(3),
+.logs-table td:nth-child(3) {
+  width: auto;
+}
+
+.log-level {
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+}
+
+.log-info {
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.log-warning {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.log-error {
+  background: rgba(239, 68, 68, 0.18);
+  color: #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.logs-table tr:last-child td {
+  border-bottom: none;
+}

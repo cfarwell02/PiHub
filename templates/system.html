@@ -342,7 +342,7 @@
         }
       }
 
-      function createLog(message) {
+      function createLog(message, level = "INFO") {
         fetch("/api/logs", {
           method: "POST",
           headers: {
@@ -350,6 +350,7 @@
           },
           body: JSON.stringify({
             message: message,
+            level: level,
           }),
         }).catch((error) => {
           console.error("Error creating log:", error);

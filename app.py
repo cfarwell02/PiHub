@@ -13,8 +13,13 @@ app_logs = []
 
 
 
-def add_log(message):
+def add_log(message, level="INFO"):
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+
+    valid_levels = ["INFO", "WARNING", "ERROR"]
+
+    if level not in valid_levels:
+        level = "INFO"
 
     app_logs.insert(0, {
         "timestamp": timestamp,
@@ -105,9 +110,11 @@ def get_logs():
 @app.route("/api/logs", methods=["POST"])
 def create_log():
     data = request.get_json()
-    message = data.get("message", "Unknown event")
 
-    add_log(message)
+    message = data.get("message", "Unknown event")
+    level = data.get("level", "INFO")
+
+    add_log(message, level)
 
     return jsonify({
         "success": True

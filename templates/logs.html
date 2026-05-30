@@ -30,13 +30,14 @@
             <thead>
               <tr>
                 <th>Timestamp</th>
+                <th>Level</th>
                 <th>Message</th>
               </tr>
             </thead>
 
             <tbody id="logs-table-body">
               <tr>
-                <td colspan="2">Loading logs...</td>
+                <td colspan="3">Loading logs...</td>
               </tr>
             </tbody>
           </table>
@@ -54,7 +55,7 @@
 
             if (logs.length === 0) {
               tableBody.innerHTML =
-                "<tr><td colspan='2'>No logs yet.</td></tr>";
+                "<tr><td colspan='3'>No logs yet.</td></tr>";
               return;
             }
 
@@ -64,10 +65,22 @@
               const timestampCell = document.createElement("td");
               timestampCell.innerText = log.timestamp;
 
+              const levelCell = document.createElement("td");
+
+              const levelBadge = document.createElement("span");
+              levelBadge.innerText = log.level || "INFO";
+              levelBadge.classList.add(
+                "log-level",
+                `log-${(log.level || "INFO").toLowerCase()}`,
+              );
+
+              levelCell.appendChild(levelBadge);
+
               const messageCell = document.createElement("td");
               messageCell.innerText = log.message;
 
               row.appendChild(timestampCell);
+              row.appendChild(levelCell);
               row.appendChild(messageCell);
 
               tableBody.appendChild(row);
