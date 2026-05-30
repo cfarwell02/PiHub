@@ -1,0 +1,5 @@
+{
+    "auto_refresh": true,
+    "refresh_interval": 1000,
+    "temperature_unit": "F"
+}
