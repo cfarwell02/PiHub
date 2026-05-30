@@ -16,6 +16,12 @@
       <section class="system-header-box">
         <h1>Logs</h1>
         <p>View recent PiHub system events and app activity.</p>
+
+        <div class="refresh-controls">
+          <button id="clear-logs-button" class="control-button">
+            Clear Logs
+          </button>
+        </div>
       </section>
 
       <section class="logs-section">
@@ -47,7 +53,8 @@
             tableBody.innerHTML = "";
 
             if (logs.length === 0) {
-              tableBody.innerHTML = "<tr><td colspan='2'>No logs yet.</td></tr>";
+              tableBody.innerHTML =
+                "<tr><td colspan='2'>No logs yet.</td></tr>";
               return;
             }
 
@@ -70,6 +77,25 @@
             console.error("Error loading logs:", error);
           });
       }
+
+      function clearLogs() {
+        fetch("/api/logs", {
+          method: "DELETE",
+        })
+          .then((response) => response.json())
+          .then((result) => {
+            if (result.success) {
+              loadLogs();
+            }
+          })
+          .catch((error) => {
+            console.error("Error clearing logs:", error);
+          });
+      }
+
+      document
+        .getElementById("clear-logs-button")
+        .addEventListener("click", clearLogs);
 
       loadLogs();
       setInterval(loadLogs, 3000);

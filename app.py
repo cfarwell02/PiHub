@@ -11,6 +11,8 @@ app = Flask(__name__)
 app_logs = []
 
 
+
+
 def add_log(message):
     timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -42,6 +44,15 @@ def settings_page():
 @app.route("/logs")
 def logs_page():
     return render_template("logs.html")
+
+@app.route("/api/logs", methods=["DELETE"])
+def clear_logs():
+    app_logs.clear()
+
+    return jsonify({
+        "success": True,
+        "message": "Logs cleared"
+    })
 
 
 @app.route("/api/system-usage", methods=["GET"])
