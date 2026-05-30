@@ -8,80 +8,73 @@
       href="{{ url_for('static', filename='css/style.css') }}"
     />
   </head>
-
   <body>
-
     {% include "navbar.html" %}
 
-    <main class="system-page">
-      <section class="system-header-box">
+    <main class="page-container">
+      <h1>Settings</h1>
 
-        <h1>Settings</h1>
-        <p>Control how PiHub behaves.</p>
-      </section>
+      <section class="settings-card">
+        <label for="refresh-interval">Refresh Interval</label>
+        <select id="refresh-interval">
+          <option value="1000">1 second</option>
+          <option value="3000">3 seconds</option>
+          <option value="5000">5 seconds</option>
+          <option value="10000">10 seconds</option>
+        </select>
 
-      <section class="settings-section">
-        <div class="settings-card">
-          <label for="refresh-interval">Refresh Interval</label>
-          <select id="refresh-interval">
-            <option value="1000">1 second</option>
-            <option value="3000">3 seconds</option>
-            <option value="5000">5 seconds</option>
-            <option value="10000">10 seconds</option>
-          </select>
+        <label for="temperature-unit">Temperature Unit</label>
+        <select id="temperature-unit">
+          <option value="C">Celsius</option>
+          <option value="F">Fahrenheit</option>
+        </select>
 
-          <label for="temperature-unit">Temperature Unit</label>
-          <select id="temperature-unit">
-            <option value="C">Celsius</option>
-            <option value="F">Fahrenheit</option>
-          </select>
+        <button id="save-settings-btn">Save Settings</button>
 
-          <button id="save-settings-button" class="control-button">
-            Save Settings
-          </button>
-
-          <p id="settings-message"></p>
-        </div>
+        <p id="settings-message"></p>
       </section>
     </main>
 
     <script>
       const refreshIntervalSelect = document.getElementById("refresh-interval");
       const temperatureUnitSelect = document.getElementById("temperature-unit");
-      const saveSettingsButton = document.getElementById(
-        "save-settings-button",
-      );
+      const saveSettingsBtn = document.getElementById("save-settings-btn");
       const settingsMessage = document.getElementById("settings-message");
 
-      refreshIntervalSelect.value = "{{ settings.refresh_interval }}";
-      temperatureUnitSelect.value = "{{ settings.temperature_unit }}";
+      async function loadSettings() {
+        const response = await fetch("/api/settings");
+        const settings = await response.json();
 
-      saveSettingsButton.addEventListener("click", function () {
+        refreshIntervalSelect.value = settings.refresh_interval || 1000;
+        temperatureUnitSelect.value = settings.temperature_unit || "C";
+      }
+
+      async function saveSettings() {
         const settings = {
-          refresh_interval: refreshIntervalSelect.value,
+          refresh_interval: Number(refreshIntervalSelect.value),
           temperature_unit: temperatureUnitSelect.value,
         };
 
-        fetch("/api/settings", {
+        const response = await fetch("/api/settings", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(settings),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              settingsMessage.innerText = "Settings saved successfully.";
-            } else {
-              settingsMessage.innerText = "Settings failed to save.";
-            }
-          })
-          .catch((error) => {
-            console.error("Error saving settings:", error);
-            settingsMessage.innerText = "Error saving settings.";
-          });
-      });
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          settingsMessage.textContent = "Settings saved successfully.";
+        } else {
+          settingsMessage.textContent = "Error saving settings.";
+        }
+      }
+
+      saveSettingsBtn.addEventListener("click", saveSettings);
+
+      loadSettings();
     </script>
   </body>
 </html>
